@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        input,
+        button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        p {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>{{ action }} Leave Request</h1>
+
+        <p><strong>Applicant:</strong> {{ leave.applicant.username }} ({{ leave.applicant.get_role_display }})</p>
+        <p><strong>Reason:</strong> {{ leave.leave_text }}</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <label for="reason">Reason/Message:</label>
+            <textarea name="reason" rows="4" placeholder="Enter reason or message..."></textarea>
+            <button type="submit">{{ action }}</button>
+        </form>
+    </div>
+</body>
+
+</html>

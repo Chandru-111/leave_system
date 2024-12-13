@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Attendance Table</title>
+    
+</head>
+<body>
+    <div class="container">
+        <h1>Select Attendance Table</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="table-selection">
+                <label for="table_name">Choose a table:</label>
+                <select class="sel" name="table_name" id="table_name" required>
+                    <option value="" disabled selected>Select a Table</option>
+                    {% for table in tables %}
+                        <option value="{{ table }}">{{ table }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="submit-button">Next</button>
+        </form>
+    </div>
+</body>
+</html>

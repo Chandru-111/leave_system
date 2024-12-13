@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Status</title>
+</head>
+<body>
+    <h1>Your Leave Status</h1>
+    <table>
+        <tr>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Current Holder</th>
+            <th>Reason/Message</th>
+            <th>Submitted On</th>
+        </tr>
+        {% for leave in leaves %}
+        <tr>
+            <td>{{ leave.leave_text }}</td>
+            <td>{{ leave.status }}</td>
+            <td>
+                {% if leave.current_holder %}
+                    {{ leave.current_holder.get_role_display }}
+                {% else %}
+                    None
+                {% endif %}
+            </td>
+            <td>{{ leave.decision_reason }}</td>
+            <td>{{ leave.submitted_on }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

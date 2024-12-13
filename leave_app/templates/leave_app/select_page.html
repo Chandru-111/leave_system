@@ -1,0 +1,488 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Option</title>
+    <style>
+        
+        .footer { 
+            border-top: 3px solid #e74c3c;
+            background-color: #ade6f7;
+            color: rgb(252, 79, 79);
+            text-align: center;
+            padding: 0rem 0; 
+            position: relative;
+            bottom: 0;
+            font-weight: bold;
+            font-size: 15px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            width: 100%;
+            font-family: cursive; 
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 0rem; 
+        }
+
+        .footer-links {
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin: 0 1rem; 
+        }
+
+        .footer-links li a {
+            color: rgb(0, 0, 0);
+            font-size: 16px; 
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px; 
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .footer-links li a:hover {
+            color: rgb(12, 20, 255); 
+            transition: 0.3s;
+        }
+
+        .done{
+            font-size: 12px;
+            color: black;
+            margin-bottom: -30px;
+            text-decoration: none;
+        }
+
+        .done1 {
+            text-decoration: none;
+            color: #000;
+        }
+
+        .done2 {
+            color: #000;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .footer {
+                padding: 0.5rem 0; 
+            }
+            .footer-content {
+                padding: 0 0.5rem; 
+            }
+
+            .footer-links {
+                flex-direction: column; 
+                padding: 0; 
+                margin: 0; 
+            }
+
+            .footer-links li {
+                margin: 0.5rem 0; 
+            }
+
+            .footer-links li a {
+                font-size: 12px; 
+                padding: 5px; 
+            }
+        }
+/* src/Navbar.css */
+.navbar {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 1rem;
+    overflow: hidden;
+    background-color: #d0d2e300;
+    font-family: cursive;
+    overflow: hidden;
+  }
+  
+  .navbar-logo {
+    flex: 0 0 auto; 
+  }
+  .navbar-logo img {
+    height: 140px;
+    width: auto;
+    margin: 0 4px;
+  }
+  
+  .navbar-content {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    flex: 1; 
+  }
+  
+  .navbar-title {
+    text-align: center; 
+    font-size: 30px;
+    margin: -40px 0;
+    width: 100%; 
+  }
+  .hh6{
+    margin-top: -30px;
+    
+  }
+  .navbar-links-container {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    width: 100%; 
+  }
+  
+  .navbar-links {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: center; 
+    margin: 0;
+    padding: 0;
+    font-size: 25px;
+  }
+  
+  .navbar-links li {
+    margin: 0 1rem;
+  }
+  
+  .navbar-links a {
+    color: rgb(18, 146, 237);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  
+  .navbar-links li:hover a {
+    color: #e91111;
+  }
+  
+  .navbar-toggle {
+    font-size: 20px;
+    display: none; 
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    background-color: #e5000000;
+    color: rgb(3, 0, 0);
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  @media (max-width: 768px) {
+    .navbar-links {
+      font-weight: bold;
+      display: none; 
+      flex-direction: column; 
+      width: 100%; 
+      padding-bottom: 20px; 
+      font-weight: bold;
+      font-size: 20px;
+      align-items: center; 
+      background-color: rgb(255, 255, 255);
+      z-index: 1;
+    }
+  .navbar-title{
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .hh6{
+    margin-top: 5px;
+  }
+    .navbar-links.open {
+      display: flex; 
+    }
+  
+    .navbar-toggle {
+      display: block; 
+      margin: 0 auto; 
+    }
+    .navbar-logo img {
+      height: 100px;
+      width: auto;
+      margin: 0 4px;
+    }
+    
+  }
+
+.dropdown-menu {
+  position: absolute; 
+  background-color: white; 
+  z-index: 1000; 
+  margin: 0; 
+  padding: 0; 
+  list-style: none; 
+  opacity: 0; 
+  transform: translateY(-10px); 
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  visibility: hidden;
+}
+
+.dropdown-menu.show {
+  opacity: 1; 
+  transform: translateY(0); 
+  visibility: visible;
+}
+
+.dropdown-menu li {
+  padding: 10px 15px; 
+}
+
+.dropdown-menu li a {
+  color: black;
+  text-decoration: none; 
+  display: block; 
+  transition: background-color 0.2s ease;
+}
+
+
+@keyframes dropdown-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dropdown-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.dropdown-menu.show {
+  animation: dropdown-enter 0.3s ease forwards;
+}
+
+.dropdown-menu {
+  animation: dropdown-exit 0.3s ease forwards;
+}
+
+
+.logout-button {
+  background-color: transparent; /* Same as other links */
+  color: rgb(18, 146, 237); /* Match the link color */
+  border: none; /* Remove border */
+  font-size: 25px; /* Match the font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: color 0.3s; 
+  font-family: cursive;/* Smooth color transition */
+}
+
+.logout-button:hover {
+  color: #e91111; /* Change color on hover, same as link hover effect */
+}
+
+
+.clss {
+    width: 100%; /* Adjust the width as needed */
+    max-width: 100%; /* Set a max width if needed */
+    padding: 20px; /* Optional padding */
+    text-align: center;
+    text-decoration: none; /* Center text inside the .clss div */
+}
+/* Style for h2 */
+.clss h2 {
+    font-size: 2rem; /* Set the font size for h2 */
+    font-weight: bold; /* Make the h2 text bold */
+    color: #333; /* Dark color for the text */
+    margin-bottom: 15px; /* Space below the h2 */
+}
+
+/* Style for h3 */
+.clss h3 {
+    font-size: 1.5rem; /* Slightly smaller than h2 */
+    font-weight: normal; /* Normal font weight */
+    color: #555; /* Lighter color for h3 */
+    margin-bottom: 10px; /* Space below the h3 */
+}
+
+/* Style for the unordered list (ul) */
+.clss ul {
+    list-style-type: none; /* Remove default bullet points */
+    padding: 0; /* Remove padding */
+    margin: 20px 0; /* Space above and below the list */
+}
+
+/* Style for list items (li) */
+.clss li {
+    margin: 10px 0; /* Space between list items */
+    font-size: 1rem; /* Set a consistent font size */
+    color: #666; /* Medium color for list items */
+}
+
+/* Style for links (a) inside .clss */
+
+
+/* Style for links on hover */
+ 
+
+/* Ensure the buttons are spaced properly */
+.button-container {
+    display: flex;
+    flex-direction: row;  /* Buttons side by side */
+    gap: 15px;  /* Space between buttons */
+    justify-content: center;  /* Center align the buttons */
+    margin-top: 20px;  /* Add top margin for spacing */
+}
+
+/* Optional: If you want to stack buttons vertically on small screens */
+@media (max-width: 768px) {
+    .button-container {
+        flex-direction: column;  /* Stack buttons on smaller screens */
+        align-items: center;  /* Center them vertically */
+    }
+
+    .auth-buttonnn {
+        width: 80%;  /* Make buttons take most of the width on mobile */
+        margin-bottom: 10px;  /* Space between buttons */
+    }
+}
+
+/* Style for the buttons */
+.auth-buttonnn {
+    padding: 1rem;
+    background-color: #f87f8b;
+    border: none;
+    border-radius: 50px;
+    color: #000000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+    text-decoration: none;
+    width: auto;  /* Allow the width to adjust based on content */
+}
+
+.auth-buttonnn:hover {
+    background-color: #de2d2d; /* Change color on hover */
+}
+body {
+    margin: 0;
+    padding: 0;
+    border-left: none;
+    border-right: none;
+    overflow-x: hidden;
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo left">
+            <img src="{% static 'attendance/images/logo1.png' %}" alt="Logo 1" alt="Left Logo" />
+        </div>
+
+        <div class="navbar-content">
+            <div class="navbar-title">
+                <h2>National Cadet Corps</h2>
+                <h6 class='hh6'>4/9 COY, 9 KAR BATTALION, BANGLORE</h6>
+            </div>
+            <div class="navbar-links-container">
+                <button class="navbar-toggle" onclick="toggleMenu()">
+                    Menu
+                </button>
+                <ul class="navbar-links" id="navbar-links">
+                    <li><a href="#" onclick="redirectToDashboard()">Home</a></li>
+                    <li><a href="#" onclick="redirectToProfile()">Profile</a></li>
+                    <li><a href="http://127.0.0.1:8000/login/" onclick="redirectToLogin()">Attendence</a></li>
+                    <li><a href="#" onclick="redirectToProfilecard()">CadetsInfo</a></li>
+                    <li><button href="#" onclick="redirectToProfile()" class="logout-button">Logout</button></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="navbar-logo right">
+            <img src="{% static 'attendance/images/logo2.png' %}" alt="Logo 2" alt="Right Logo" />
+        </div>
+    </nav>
+<hr>
+<div class="clss">
+    <h2>Welcome, {{ request.user.username }}!</h2>
+
+    {% if is_staff %}
+    <h3 class="hhhh">Choose an option:</h3>
+    <div class="button-container">
+        <a href="{% url 'mark_attendance' %}" class="auth-buttonnn">Mark Attendance</a>
+        <a href="{% url 'view_percentage' %}" class="auth-buttonnn">View Percentage</a>
+    </div>
+{% else %}
+    <h3>Choose an option:</h3>
+    <div class="button-container">
+        <a href="{% url 'view_percentage' %}" class="auth-buttonnn">View Percentage</a>
+    </div>
+{% endif %}
+
+</div>
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 CMRNCC. All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="#" onclick="redirectToDashboard()">Home</a></li>
+                <li><a href="#" onclick="redirectToProfile()">Profile</a></li>
+                <li><a href="http://127.0.0.1:8000/login/" onclick="redirectToLogin()">Attendence</a></li>
+                <li><a href="#" onclick="redirectToProfilecard()">CadetsInfo</a></li>
+                <li><a href="#" onclick="redirectToProfile()" >Logout</a></li>
+            </ul>
+        </div>
+        <div class="done">
+            <h6>
+                Done by Cadet <a href="https://github.com/chandru" target="_blank" rel="noopener noreferrer" class="done1">Chandru H</a> and 
+                <a href="https://github.com/Akash8245" target="_blank" rel="noopener noreferrer" class="done2"> Akash M</a>
+            </h6>
+        </div>
+    </footer>
+    
+    <script>
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            const menu = document.getElementById('navbar-links');
+            if (isMenuOpen) {
+                menu.classList.add('open');
+            } else {
+                menu.classList.remove('open');
+            }
+        }
+
+        function handleLinkClick() {
+            isMenuOpen = false;
+            const menu = document.getElementById('navbar-links');
+            menu.classList.remove('open');
+        }
+   
+        function redirectToDashboard() {
+            window.location.href = 'http://localhost:5173/dashboard1';
+        }
+        function redirectToProfile() {
+            window.location.href = 'http://localhost:5173/profile1';
+        }
+
+        function redirectToLogin() {
+            window.location.href = 'http://127.0.0.1:8000/login/';
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('authToken');
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

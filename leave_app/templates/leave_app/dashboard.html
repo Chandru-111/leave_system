@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            
+            
+            {% if user.is_authenticated %}
+                <!-- Only visible for authenticated users -->
+                <li><a href="{% url 'dashboard' %}">Home</a></li>
+                <li><a href="{% url 'apply_leave' %}">Apply Leave</a></li>
+                <li><a href="{% url 'leave_status' %}">Leave Status</a></li>
+                <li><a href="{% url 'leave_requests' %}">Leave Requests</a></li>
+                <li><a href="{% url 'mark_attendance' %}">Mark Attendance</a></li>
+                <li><a href="{% url 'view_percentage' %}">View Attendance</a></li>
+                <li><a href="{% url 'student_info' %}">Student Info</a></li>
+                <li><a href="{% url 'display_student_info' %}">View Student Info</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+                <!-- Visible for non-authenticated users -->
+                <li><a href="{% url 'home' %}">Login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <header>
+        {% if user.is_authenticated %}
+            <h1>Welcome,  {{ user.get_role_display }}    {{ user.username }}</h1>
+            <!-- Display any additional protected data here -->
+            
+        {% else %}
+            <h1>You need to log in to view this content.</h1>
+        {% endif %}
+    </header>
+
+</body>
+</html>

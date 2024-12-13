@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Attendance for {{ table_name }}</title>
+ 
+   <script>
+    // JavaScript to handle "Select All" functionality
+    function toggleAllAttendance(type) {
+        const checkboxes = document.querySelectorAll(`input[name="attendance"][value$="${type}"]`);
+        const selectAllCheckbox = document.getElementById(`select_all_${type}`);
+        
+        // If the "Select All" checkbox is checked, select all corresponding checkboxes
+        checkboxes.forEach(checkbox => checkbox.checked = selectAllCheckbox.checked);
+        
+        // Deselect other "Select All" checkboxes
+        const otherTypes = ['Present', 'Absent', 'Holiday'].filter(t => t !== type);
+        otherTypes.forEach(otherType => {
+            const otherCheckboxes = document.querySelectorAll(`input[name="attendance"][value$="${otherType}"]`);
+            otherCheckboxes.forEach(checkbox => checkbox.checked = false); // Deselect the other types
+        });
+    }
+</script>
+</head>
+<body>
+    <div class="container">
+        <h2>Mark Attendance for {{ table_name }}</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="column-selection">
+                <label for="column_name">Select Day:</label>
+                <select class="sel" name="column_name" id="column_name" required>
+                    <option value="" disabled selected>Select a Day</option>
+                    <option value="nov_1">November 1</option>
+                    <option value="nov_2">November 2</option>
+                    <option value="nov_3">November 3</option>
+                    <option value="nov_4">November 4</option>
+                </select>
+            </div>
+
+            <h3>Attendance Options:</h3>
+            <!-- "Select All" checkboxes for each attendance type -->
+            <div>
+                <label><input type="checkbox" id="select_all_Present" onclick="toggleAllAttendance('Present')"> Select All Present</label>
+                <label><input type="checkbox" id="select_all_Absent" onclick="toggleAllAttendance('Absent')"> Select All Absent</label>
+                <label><input type="checkbox" id="select_all_Holiday" onclick="toggleAllAttendance('Holiday')"> Select All Holiday</label>
+            </div>
+
+            <h3>Students:</h3>
+            <div class="student-list">
+                {% for record in records %}
+                    <div class="student-item">
+                        <label>{{ record.student }}</label>
+                        <div class="attendance-options">
+                            <input type="checkbox" name="attendance" value="{{ record.id }}-Present"> Present
+                            <input type="checkbox" name="attendance" value="{{ record.id }}-Absent"> Absent
+                            <input type="checkbox" name="attendance" value="{{ record.id }}-Holiday"> Holiday
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,291 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .search-bar {
+            margin: 0 auto 30px auto;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: calc(33.33% - 20px);
+            box-sizing: border-box;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .card p strong {
+            color: #333;
+        }
+
+        .card button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .card button:hover {
+            background-color: #0056b3;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #777;
+            margin-top: 20px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                width: 100%;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        function searchStudents() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+            let found = false;
+
+            cards.forEach(card => {
+                const name = card.querySelector('h2').textContent.toLowerCase();
+                if (name.includes(input)) {
+                    card.style.display = '';
+                    found = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const noResults = document.getElementById('noResults');
+            if (found) {
+                noResults.style.display = 'none';
+            } else {
+                noResults.style.display = 'block';
+            }
+        }
+
+        function downloadImage(imageUrl) {
+            const link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = 'student_photo.jpg';
+            link.click();
+        }
+
+        function downloadStudentData(student) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Add images to top-left and top-right corners
+    const leftImage = '{% static "images/right.jpg" %}';
+    const rightImage = '{% static "images/left.jpg" %}';
+    doc.addImage(leftImage, 'JPEG', 10, 2.5, 70, 40); // Top-left corner
+    doc.addImage(rightImage, 'JPEG', 170, 10, 25, 25); // Top-right corner
+
+    // Title
+    const titleText = "CMR NCC CADET INFORMATION";
+    doc.setFontSize(25);
+    doc.setFont("helvetica", "bold");
+    const titleWidth = doc.getTextWidth(titleText);
+    const titleX = (210 - titleWidth) / 2;  // Center the title
+    doc.text(titleText, titleX, 50);
+
+    // Add student's photo below the title
+    const imgSrc = student.photo ? student.photo : '{% static "images/placeholder-image.jpg" %}';
+    doc.addImage(imgSrc, 'JPEG', 80, 60, 60, 70); // Position student image below the title
+
+    // Add student details (centered)
+    doc.setFontSize(17);  // Adjust font size for better fitting
+    doc.setFont("helvetica", "bold");
+
+    let yPosition = 150; // Starting position for student details
+
+    // Add student details dynamically, excluding sensitive fields for cadets
+    const details = [
+        `Name: ${student.name}`,
+        `Rank: ${student.rank}`,
+        `Date of Birth: ${student.dob}`,
+        `Father's Name: ${student.father_name}`,
+        `Mother's Name: ${student.mother_name}`,
+        // Add PAN, Aadhar, and Driving License only if not a cadet
+        ...(student.role !== 'cdt' ? [
+            `Aadhar No: ${student.aadhar_no}`,
+            `PAN No: ${student.pan_no}`,
+            `Driving License: ${student.driving_license}`
+        ] : []),
+        `Register No: ${student.register_no}`,
+        `Campus: ${student.campus}`,
+        `School Name: ${student.school_name}`,
+        `Course: ${student.course}`
+    ];
+
+    // Center the details text on the page
+    details.forEach(detail => {
+        const detailWidth = doc.getTextWidth(detail);
+        const detailX = (210 - detailWidth) / 2;  // Center the detail
+        doc.text(detail, detailX, yPosition);
+        yPosition += 10;  // Move to next line
+    });
+
+    // Save the PDF with the student's name
+    doc.save(`${student.name}_data.pdf`);
+}
+
+
+    </script>
+</head>
+<body>
+    
+    <h1>Student Information</h1>
+
+    <div class="search-bar">
+        <input type="text" id="searchInput" onkeyup="searchStudents()" placeholder="Search by name...">
+    </div>
+    
+    <div id="noResults" class="no-results">No cadet with this name exists.</div>
+    
+    {% if students %}
+        <div class="cards-container">
+            {% for student in students %}
+                <div class="card">
+                    {% if student.photo %}
+    <img src="{{ student.photo.url }}" alt="Student Photo">
+    {% if user.role != "cdt" %}
+        <button onclick="downloadImage('{{ student.photo.url }}')">Download Photo</button>
+    {% endif %}
+{% else %}
+    <img src="{% static 'images/placeholder-image.jpg' %}" alt="No Photo Available">
+    {% if user.role != "cdt" %}
+        <button onclick="downloadImage('{{ student.photo.url }}')">Download Photo</button>
+    {% endif %}
+{% endif %}
+
+    
+                    <h2>{{ student.name }}</h2>
+                    <p><strong>Rank:</strong> {{ student.rank }}</p>
+                    <p><strong>DOB:</strong> {{ student.dob }}</p>
+                    <p><strong>Father's Name:</strong> {{ student.father_name }}</p>
+                    <p><strong>Mother's Name:</strong> {{ student.mother_name }}</p>
+                    <p><strong>Register No:</strong> {{ student.register_no }}</p>
+                    <p><strong>Campus:</strong> {{ student.campus }}</p>
+                    <p><strong>School Name:</strong> {{ student.school_name }}</p>
+                    <p><strong>Course:</strong> {{ student.course }}</p>
+    
+                    {% if user.role != 'cdt' %}
+                        <!-- These fields are visible only for non-cadets -->
+                        <p><strong>Aadhar No:</strong> {{ student.aadhar_no }}</p>
+                        <p><strong>PAN No:</strong> {{ student.pan_no }}</p>
+                        <p><strong>Driving License:</strong> {{ student.driving_license }}</p>
+                    {% else %}
+                        <!-- For Cadets, show only first 4 digits -->
+                        <p><strong>Aadhar No:</strong> {{ student.aadhar_no|slice:":4" }}XXXXXXXX</p>
+                        <p><strong>PAN No:</strong> {{ student.pan_no|slice:":4" }}XXXXX</p>
+                        <p><strong>Driving License:</strong> {{ student.driving_license|slice:":4" }}XXXXXXXXXX</p>
+                    {% endif %}
+    
+                    <!-- Button to download student data as PDF -->
+                    {% if user.role != "cdt" %}
+                    <button onclick="downloadStudentData({
+                        photo: '{{ student.photo.url }}',  
+                        name: '{{ student.name }}',
+                        rank: '{{ student.rank }}',
+                        dob: '{{ student.dob }}',
+                        father_name: '{{ student.father_name }}',
+                        mother_name: '{{ student.mother_name }}',
+                        aadhar_no: '{{ student.aadhar_no }}',
+                        pan_no: '{{ student.pan_no }}',
+                        driving_license: '{{ student.driving_license }}',
+                        register_no: '{{ student.register_no }}',
+                        campus: '{{ student.campus }}',
+                        school_name: '{{ student.school_name }}',
+                        course: '{{ student.course }}',
+                        role: '{{ student.role }}'
+                    })">Download PDF</button>
+                {% endif %}
+                
+    
+                    
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No students available.</p>
+    {% endif %}
+    
+</body>
+</html>
